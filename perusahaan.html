@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="shortcut icon" type="image/x-icon" href="icon/favicon.ico">
+  <title>Pusat Karir - Data Perusahaan</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/vue@2/dist/vue.js"></script>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.1/font/bootstrap-icons.css">
+  
+</head>
+
+<body>
+  <div class="container">
+
+    <nav class="navbar fixed-top navbar-expand-lg navbar-dark bg-dark">
+      <div class="container-fluid">
+        <a class="navbar-brand" href="#">Pusat Karir</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+          <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+            <li class="nav-item">
+              <a class="nav-link active" aria-current="page" href="index.html">Home</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link active" aria-current="page" href="about.html">About</a>
+          </li>
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                Master
+              </a>
+              <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                <li><a class="dropdown-item" href="perusahaan.html">Perusahaan</a></li>
+                <li><a class="dropdown-item" href="lowongan.html">Lowongan</a></li>
+                <li><a class="dropdown-item" href="alumni.html">Alumni</a></li>
+              </ul>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+  
+    <div id="app">
+  
+      <div class="container">
+        <div class="py-5 text-center">
+          <h2>Data Perusahaan</h2>
+          <!-- <p class="lead">Below is an example of CRUD operation using VueJS</p> -->
+        </div>
+  
+        <div class="col-md-12">
+          <h4 class="mb-3">Perusahaan Data <button class="btn btn-md btn-info" style="float: right;" v-on:click="resetForm()">Create new Perusahaan
+            </button>
+          </h4>
+          <table class="table table-striped">
+            <tr>
+              <th>ID</th>
+              <th>Name</th>
+              <th>Address</th>
+              <th>Email</th>
+              <th>Telepon</th>
+              <th>Jenis Perusahaan</th>
+              <th>Edit</th>
+              <th>Delete</th>
+            </tr>
+            <tr v-for="user in users">
+              <td>{{ user.id }}</td>
+              <td>{{ user.name }}</td>
+              <td>{{ user.address }}</td>
+              <td>{{ user.email }}</td>
+              <td>{{ user.telepon }}</td>
+              <td>{{ user.jenis_perusahaan }}</td>
+              <td><button class="btn btn-md btn-warning" v-on:click="getEdit(user)">Edit</button></td>
+              <td><button class="btn btn-danger" v-on:click="getDelete(user)">Delete</button></td>
+              </li>
+          </table>
+  
+          <div v-if="message" class="alert alert-success" role="alert">
+            {{ message }}
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+  
+  
+          <h4 class="mb-3">Perusahaan Information</h4>
+          <form class="needs-validation" novalidate>
+            <div class="row">
+              <div class="col-md-12 mb-3">
+                <label for="name">Name</label>
+                <input v-model="name" type="text" class="form-control" id="name" placeholder="" value=""
+                  required>
+                <div class="invalid-feedback">
+                  Valid name is required.
+                </div>
+              </div>
+              <div class="col-md-12 mb-3">
+                <label for="address">Address</label>
+                <textarea name="address" v-model="address" id="address" cols="30" rows="10" required class="form-control"></textarea>
+                <div class="invalid-feedback">
+                  Valid Address is required.
+                </div>
+              </div>
+            </div>
+            <div class="mb-3">
+              <label for="telepon">Telepon</label>
+              <div class="input-group">
+                <input v-model="telepon" type="number" class="form-control" id="telepon" placeholder="Telepon" required>
+                <div class="invalid-feedback" style="width: 100%;">
+                  Your telepon is required.
+                </div>
+              </div>
+            </div>
+            <div class="mb-3">
+              <label for="jenis_perusahaan">Jenis Perusahaan</label>
+              <div class="input-group">
+                <select name="jenis_perusahaan" v-model="jenis_perusahaan" id="jenis_perusahaan" class="form-select" required>
+                  <option value="Farmasi">Farmasi</option>
+                  <option value="Entertainment">Entertainment</option>
+                  <option value="Bussiness">Bussiness</option>
+                </select>
+                <div class="invalid-feedback" style="width: 100%;">
+                  Your Jenis Perusahaan is required.
+                </div>
+              </div>
+            </div>
+            <div class="mb-3">
+              <label for="email">Email <span class="text-muted">(Optional)</span></label>
+              <input v-model="email" type="email" class="form-control" id="email" placeholder="you@example.com">
+              <div class="invalid-feedback">
+                Please enter a valid email address.
+              </div>
+            </div>
+            <div class="mb-3">
+              <label for="logo_perusahaan">Logo Perusahaan</label>
+              <div class="input-group">
+                <input v-model="logo_perusahaan" type="text" class="form-control" id="logo_perusahaan" placeholder="Logo Perusahaan" required>
+                <div class="invalid-feedback" style="width: 100%;">
+                  Your Logo Perusahaan is required.
+                </div>
+              </div>
+            </div>
+            <div class="mb-3">
+              <label for="surat_izin">Surat Izin</label>
+              <div class="input-group">
+                <input v-model="surat_izin" type="text" class="form-control" id="surat_izin" placeholder="Surat Izin" required>
+                <div class="invalid-feedback" style="width: 100%;">
+                  Your Surat Izin is required.
+                </div>
+              </div>
+            </div>
+        </div>
+  
+        <hr class="mb-4">
+        <button v-if="!editMode && !deleteMode" v-on:click="createUser" class="btn btn-success btn-lg btn-block"
+          type="submit">Submit Data</button>
+        <button v-if="editMode" v-on:click="updateUser" class="btn btn-warning btn-lg btn-block" type="submit">Update
+          Data</button>
+        <button v-if="deleteMode" v-on:click="deleteUser" class="btn btn-danger btn-lg btn-block" type="submit">Delete
+          Data</button>
+  
+        </form>
+      </div>
+    </div>
+  
+    <footer class="my-5 pt-5 text-muted text-center text-small">
+      <p class="mb-1">&copy; 2021 FTI UNAI</p>
+      <ul class="list-inline">
+        <li class="list-inline-item"><a href="#">Privacy</a></li>
+        <li class="list-inline-item"><a href="#">Terms</a></li>
+        <li class="list-inline-item"><a href="#">Support</a></li>
+        <ul class="list-inline">
+          <i class="bi bi-facebook text-primary"  style="font-size: 2rem;"><a href="#"></a></i>
+          <i class="bi bi-whatsapp text-success" style="font-size: 2rem;"><a href="#"></a></i>
+          <i class="bi bi-instagram text-danger" style="font-size: 2rem;"><a href="#"></a></i>
+      </ul>
+    </footer>
+  
+    </div>
+  
+  
+    <!-- Axios -->
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+  
+    <script>
+      var app = new Vue({
+        el: '#app',
+        data: {
+          errors: [],
+          message: null,
+          users: [],
+          userIdEdit: null,
+          userIdDelete: null,
+          editMode: false,
+          deleteMode: false,
+          name: '',
+          address: '',
+          email: '',
+          telepon: '',
+          jenis_perusahaan: '',
+          logo_perusahaan: '',
+          surat_izin: ''
+        },
+        mounted: function () {
+          this.getPerusahaan();
+        },
+        methods: {
+          resetFormTotal(){
+            this.message = null;
+            this.editMode = false;
+            this.deleteMode = false;
+            this.userIdEdit = null;
+            this.name = null;
+            this.address = null;
+            this.telepon = null;
+            this.email = null;
+            this.jenis_perusahaan = null;
+            this.logo_perusahaan = null;
+            this.surat_izin = null;
+          },
+          getPerusahaan() {
+            axios.get('https://621d622a806a09850a58e60c.mockapi.io/Perusahaan')
+              .then(response => {
+                this.users = response.data;
+                this.resetFormTotal();
+                console.log(response);
+              })
+              .catch(error => {
+                console.log(error);
+              });
+          },
+          createUser: function () {
+            axios.post('https://621d622a806a09850a58e60c.mockapi.io/Perusahaan', {
+                name: this.name,
+                address: this.address,
+                telepon: this.telepon,
+                email: this.email,
+                jenis_perusahaan: this.jenis_perusahaan,
+                logo_perusahaan: this.logo_perusahaan,
+                surat_izin: this.surat_izin
+              })
+              .then(response => {
+                this.getPerusahaan();
+                this.message = "Your data has been submitted";
+                console.log(response);
+              })
+              .catch(error => {
+                console.log(error);
+              });
+          },
+          resetForm: function () {
+            this.message = null;
+            this.editMode = false;
+            this.deleteMode = false;
+            this.userIdEdit = null;
+            this.name = null;
+            this.address = null;
+            this.telepon = null;
+            this.email = null;
+            this.jenis_perusahaan = null;
+            this.logo_perusahaan = null;
+            this.surat_izin = null;
+          },
+          getEdit: function (perusahaan) {
+            this.message = null;
+            this.editMode = true;
+            this.deleteMode = false;
+            this.userIdEdit = perusahaan.id;
+            this.name = perusahaan.name;
+            this.address = perusahaan.address;
+            this.telepon = perusahaan.telepon;
+            this.email = perusahaan.email;
+            this.jenis_perusahaan = perusahaan.jenis_perusahaan;
+            this.logo_perusahaan = perusahaan.logo_perusahaan;
+            this.surat_izin = perusahaan.surat_izin;
+          },
+          getDelete: function (perusahaan) {
+            this.message = null;
+            this.deleteMode = true;
+            this.editMode = false;
+            this.userIdDelete = perusahaan.id;
+            this.name = perusahaan.name;
+            this.address = perusahaan.address;
+            this.telepon = perusahaan.telepon;
+            this.email = perusahaan.email;
+            this.jenis_perusahaan = perusahaan.jenis_perusahaan;
+            this.logo_perusahaan = perusahaan.logo_perusahaan;
+            this.surat_izin = perusahaan.surat_izin;
+          },
+          updateUser: function () {
+            axios.put(`https://621d622a806a09850a58e60c.mockapi.io/Perusahaan/${this.userIdEdit}`, {
+                name: this.name,
+                address: this.address,
+                telepon: this.telepon,
+                email: this.email,
+                jenis_perusahaan: this.jenis_perusahaan,
+                logo_perusahaan: this.logo_perusahaan,
+                surat_izin: this.surat_izin,
+              })
+              .then(res => {
+                // handle success
+                this.message = "Your data has been updated";
+                this.getPerusahaan();
+              })
+              .catch(err => {
+                // handle error
+                console.log(err);
+              })
+          },
+          // Delete User
+          deleteUser: function () {
+            axios.delete(`https://621d622a806a09850a58e60c.mockapi.io/Perusahaan/${this.userIdDelete}`)
+              .then(res => {
+                // handle success
+                this.message = "Your data has been deleted";
+                this.getPerusahaan();
+              })
+              .catch(err => {
+                // handle error
+                console.log(err);
+              })
+          }
+        }
+      })
+    </script>
+
+  </div>
+</body>
+
+</html>

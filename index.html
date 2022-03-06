@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="shortcut icon" type="image/x-icon" href="icon/favicon.ico">
+  <title>APLIKASI PUSAT KARIR</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.1/font/bootstrap-icons.css">
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/vue@2/dist/vue.js"></script>
+  <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+  
+</head>
+
+<body>
+  <script>
+    swal({
+  title: "Perhatian!",
+  text: "Klik OK untuk Konfirmasi Masuk Ke Dalam Website Pusat Karir!",
+  icon: "warning",
+  buttons: true,
+  dangerMode: true,
+})
+.then((willDelete) => {
+  if (willDelete) {
+    swal("Oke, Terima Kasih Atas Konfirmasi Mu", {
+      icon: "success",
+    });
+  } else {
+    swal("Terima Kasih sudah berkunjung ");
+  }
+});
+</script>
+  <div class="container">
+
+    <nav class="navbar fixed-top navbar-expand-lg navbar-dark bg-dark">
+      <div class="container-fluid">
+        <a class="navbar-brand" href="#">Pusat Karir</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+          <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+            <li class="nav-item">
+              <a class="nav-link active" aria-current="page" href="index.html">Home</a>
+              <li class="nav-item">
+                <a class="nav-link active" aria-current="page" href="about.html">About</a>
+            </li>
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                Master
+              </a>
+              
+              <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                <li><a class="dropdown-item" href="perusahaan.html">Perusahaan</a></li>
+                <li><a class="dropdown-item" href="lowongan.html">Lowongan</a></li>
+                <li><a class="dropdown-item" href="alumni.html">Alumni</a></li>
+              </ul>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+  
+    <div id="app">
+  
+      <div class="container">
+        <div class="py-5 text-center">
+          <h2>Data Pelamar</h2>
+        </div>
+  
+        <div class="col-md-12">
+          <h4 class="mb-3">Data Pelamar <button class="btn btn-md btn-info" style="float: right;" v-on:click="resetForm()">Create new Data Pelamar
+            </button>
+          </h4>
+          <table class="table table-striped">
+            <tr>
+              <th>ID</th>
+              <th>Nama Lowongan</th>
+              <th>Nama Alumni</th>
+              <th>Edit</th>
+              <th>Delete</th>
+            </tr>
+            <tr v-for="user in users">
+              <td>{{ user.id }}</td>
+              <td v-for="l in lowongan" v-if="l.id === user.id_lowongan">{{ l.nama_lowongan }}</td>
+              <td v-for="a in alumni" v-if="a.id === user.id_alumni">{{ a.nama }}</td>
+              <td><button class="btn btn-md btn-warning" v-on:click="getEdit(user)">Edit</button></td>
+              <td><button class="btn btn-danger" v-on:click="getDelete(user)">Delete</button></td>
+              </li>
+          </table>
+  
+          <div v-if="message" class="alert alert-success" role="alert">
+            {{ message }}
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+  
+  
+          <h4 class="mb-3">Pelamar Information</h4>
+          <form class="needs-validation" novalidate>
+            <div class="row">
+              <div class="col-md-12 mb-3">
+                <label for="id_lowongan">Nama Lowongan</label>
+                <select name="id_lowongan" id="id_lowongan" v-model="id_lowongan" class="form-select" required>
+                  <option v-for="l in lowongan" :value="l.id">{{ l.nama_lowongan }}</option>
+                </select>
+              </div>
+              <div class="col-md-12 mb-3">
+                <label for="id_alumni">Nama Alumni</label>
+                <select name="id_alumni" id="id_alumni" v-model="id_alumni" class="form-select" required>
+                  <option v-for="a in alumni" :value="a.id">{{ a.nama }}</option>
+                </select>
+              </div>
+            </div>
+        </div>
+            
+        <hr class="mb-4">
+        <button v-if="!editMode && !deleteMode" v-on:click="createUser" class="btn btn-success btn-lg btn-block"
+          type="submit">Submit Data</button>
+        <button v-if="editMode" v-on:click="updateUser" class="btn btn-warning btn-lg btn-block" type="submit">Update
+          Data</button>
+        <button v-if="deleteMode" v-on:click="deleteUser" class="btn btn-danger btn-lg btn-block" type="submit">Delete
+          Data</button>
+  
+        </form>
+      </div>
+    </div>
+  
+    <footer class="my-5 pt-5 text-muted text-center text-small">
+      <p class="mb-1">&copy; 2021 FTI UNAI</p>
+      <ul class="list-inline">
+        <li class="list-inline-item"><a href="#">Privacy</a></li>
+        <li class="list-inline-item"><a href="#">Terms</a></li>
+        <li class="list-inline-item"><a href="#">Support</a></li>
+        <ul class="list-inline">
+          <i class="bi bi-facebook text-primary"  style="font-size: 2rem;"><a href="#"></a></i>
+          <i class="bi bi-whatsapp text-success" style="font-size: 2rem;"><a href="#"></a></i>
+          <i class="bi bi-instagram text-danger" style="font-size: 2rem;"><a href="#"></a></i>
+      </ul>
+    </footer>
+  
+    </div>
+  
+  
+    <!-- Axios -->
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+  
+    <script>
+      var app = new Vue({
+        el: '#app',
+        data: {
+          errors: [],
+          message: null,
+          users: [],
+          lowongan: [],
+          alumni: [],
+          userIdEdit: null,
+          userIdDelete: null,
+          editMode: false,
+          deleteMode: false,
+          id_lowongan: '',
+          id_alumni: ''
+        },
+        mounted: function () {
+          this.getUser();
+        },
+        methods: {
+          getUser() {
+            axios.get('https://621d622a806a09850a58e60c.mockapi.io/Lamaran')
+              .then(response => {
+                this.users = response.data;
+                console.log(response);
+              })
+              .catch(error => {
+                console.log(error);
+              });
+
+            axios.get('https://621d622a806a09850a58e60c.mockapi.io/Lowongan')
+              .then(response => {
+                this.lowongan = response.data;
+                console.log(response);
+              })
+              .catch(error => {
+                console.log(error);
+              });
+
+            axios.get('https://621d622a806a09850a58e60c.mockapi.io/Alumni')
+              .then(response => {
+                this.alumni = response.data;
+                console.log(response);
+              })
+              .catch(error => {
+                console.log(error);
+              });
+          },
+          createUser: function () {
+            axios.post('https://621d622a806a09850a58e60c.mockapi.io/Lamaran', {
+                id_lowongan: this.id_lowongan,
+                id_alumni: this.id_alumni
+              })
+              .then(response => {
+                this.getUser();
+                this.message = "Your data has been submitted";
+                console.log(response);
+              })
+              .catch(error => {
+                console.log(error);
+              });
+          },
+          resetForm: function () {
+            this.message = null;
+            this.editMode = false;
+            this.deleteMode = false;
+            this.userIdEdit = null;
+            this.id_lowongan = null;
+            this.id_alumni = null;
+          },
+          getEdit: function (user) {
+            this.message = null;
+            this.editMode = true;
+            this.deleteMode = false;
+            this.userIdEdit = user.id;
+            this.id_lowongan = user.id_lowongan;
+            this.id_alumni = user.id_alumni;
+          },
+          getDelete: function (user) {
+            this.message = null;
+            this.deleteMode = true;
+            this.editMode = false;
+            this.userIdDelete = user.id;
+            this.id_lowongan = user.id_lowongan;
+            this.id_alumni = user.id_alumni;
+          },
+          updateUser: function () {
+            axios.put(`https://621d622a806a09850a58e60c.mockapi.io/Lamaran/${this.userIdEdit}`, {
+                id_lowongan: this.id_lowongan,
+                id_alumni: this.id_alumni
+              })
+              .then(res => {
+                // handle success
+                this.message = "Your data has been updated";
+                this.getUser();
+              })
+              .catch(err => {
+                // handle error
+                console.log(err);
+              })
+          },
+          // Delete User
+          deleteUser: function () {
+            axios.delete(`https://621d622a806a09850a58e60c.mockapi.io/Lamaran/${this.userIdDelete}`)
+              .then(res => {
+                // handle success
+                this.message = "Your data has been deleted";
+                this.getUser();
+              })
+              .catch(err => {
+                // handle error
+                console.log(err);
+              })
+          }
+        }
+      })
+    </script>
+
+  </div>
+</body>
+
+</html>
